@@ -103,7 +103,7 @@ def get_song_url(sid, data):
 
 	
 
-def download(sid, path = "Download\\"):
+def download(sid, path = "Downloads\\"):
 	try: 
 		os.mkdir(path)
 	except:
@@ -125,13 +125,6 @@ def download(sid, path = "Download\\"):
 		f = open(path + name + " " + artist + '.mp3', "wb")
 		f.write(data)
 		f.close()
-
-	data = request.urlopen(mp3_url).readall()
-		# try:
-
-	f = open(name + '.mp3', "wb")
-	f.write(data)
-	f.close()
 
 	print ("Downloaded successfully!")
 	# print (f)
@@ -155,7 +148,7 @@ def download_by_album(aid):
 	time = ctime(data['publishTime'] / 1000)[-4:0]
 	artist = data['artist']['name']
 	name = data['name']
-	path = "Download\\" + name + " " + artist + " " + time + "\\"
+	path = "Downloads\\" + name + " " + artist + " " + time + "\\"
 
 
 	try: 
