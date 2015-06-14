@@ -103,7 +103,7 @@ def get_song_url(sid, data):
 
 	
 
-def download(sid, path = "\\Download\\"):
+def download(sid, path = "Download\\"):
 	try: 
 		os.mkdir(path)
 	except:
@@ -136,9 +136,9 @@ def download(sid, path = "\\Download\\"):
 	print ("Downloaded successfully!")
 	# print (f)
 	# os.startfile(name + '.mp3')
-	sound = pyglet.media.load(name + '.mp3', streaming=True)
-	sound.play()
-	pyglet.app.run()
+	# sound = pyglet.media.load(name + '.mp3', streaming=True)
+	# sound.play()
+	# pyglet.app.run()
 	return name + '.mp3'
 	# 	except:
 	# 		print ("File could not be written.")
@@ -155,7 +155,7 @@ def download_by_album(aid):
 	time = ctime(data['publishTime'] / 1000)[-4:0]
 	artist = data['artist']['name']
 	name = data['name']
-	path = "\\Download\\" + name + " " + artist + " " + time + "\\"
+	path = "Download\\" + name + " " + artist + " " + time + "\\"
 
 
 	try: 
