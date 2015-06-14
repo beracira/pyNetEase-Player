@@ -6,7 +6,6 @@ import hashlib
 import json
 import os
 import pyglet
-from time import ctime
 
 search_url = 'http://music.163.com/api/search/get'
 
@@ -81,50 +80,30 @@ def search(s, stype, offset = 0, limit = 10):
 	data = json.loads(resp.decode())
 
 	if (data['code'] == 200):
-		return data['result']
+		return data['result']['songs']
 	else:
 		return 'Search Failed!'
 
+def play(sid):
+	detail_url = r"http://music.163.com/api/song/detail/?id={0}&ids=['{0}']".format(sid)
+	resp = request.urlopen(detail_url).readall()
 
-def get_song_url(sid, data):
-	template = "http://m1.music.126.net/{0}/{1}.mp3"
+	data = json.loads(resp.decode())
+	# try:
+	mp3_url = data['songs'][0]['mp3Url']
+	name = data['songs'][0]['name']
+	print ("Start buffering.......")
 
-	dfsid = ''
+	data = request.urlopen(mp3_url).readall()
 
-	try:
-		dfsid = data['hMusic']['dfsId']
-	except:
-		try:
-			dfsid = data['mMusic']['dfsId']
-		except:
-			return data['mp3Url']
-
-	return template.format(encrypted_id(str(dfsid).encode("utf8")), dfsid)
-
-	
-
-def download(sid, path = "\\Download\\"):
 	try: 
-		os.mkdir(path)
+		os.mkdir("Download")
 	except:
 		pass
 
-	detail_url = r"http://music.163.com/api/song/detail/?id={0}&ids=['{0}']".format(sid)
-	resp = request.urlopen(detail_url).readall()
-	data = json.loads(resp.decode())['songs'][0]
-
-	name = data['name']
-	artist = data['artists'][0]['name']
-	print ("Start downloading: " + name)
-
-	if (not os.path.isfile(path + name + " " + artist + '.mp3')):
-		mp3_url = get_song_url(sid, data)
-
-		data = request.urlopen(mp3_url).readall()
-
-		f = open(path + name + " " + artist + '.mp3', "wb")
-		f.write(data)
-		f.close()
+	f = open('Download\\' + name + '.mp3', "wb")
+	f.write(data)
+	f.close()
 
 	print ("Downloaded successfully!")
 	# print (f)
@@ -139,43 +118,9 @@ def download(sid, path = "\\Download\\"):
 	# 	print ("Cannot connect.")
 	# return False
 
-def download_by_album(aid):
-	album_url =  "http://music.163.com/api/album/{0}/".format(aid)
-
-	resp = request.urlopen(album_url).readall()
-	data = json.loads(resp.decode())['album']
-
-	time = ctime(data['publishTime'] / 1000)[-4:0]
-	artist = data['artist']['name']
-	name = data['name']
-	path = "\\Download\\" + name + " " + artist + " " + time + "\\"
-
-
-	try: 
-		os.mkdir(path)
-	except:
-		pass
-
-	print ("Cover downloading...")
-
-	pic = request.urlopen(data['picUrl']).readall()
-	f = open(path + "cover.jpg", "wb")
-	f.write(pic)
-	f.close()
-
-	for song in data['songs']:
-		download(song['id'], path)
-
-	print ("Album downloaded!")
-
 
 
 # search_by_songs("two of us")
-# print (search("The Beatles Bootleg Recordings 1963".encode("utf8"), 10))
-# resp = request.urlopen(r"http://music.163.com/api/album/2956076/").readall()
-# data = json.loads(resp.decode())
-# print (data)
-
 
 
 # print(encrypted_id(209079))
@@ -185,11 +130,7 @@ def download_by_album(aid):
 
 # print (music_url)
 
-# resp = request.urlopen(r"http://music.163.com/api/song/detail/?id=28949444&ids=['28949444']").readall()
-# resp = request.urlopen(r"http://music.163.com/api/artist/178059/").readall()
-# # resp = request.urlopen(r"http://music.163.com/api/playlist/detail?id=76494274").readall()
+# resp = request.urlopen(r"http://music.163.com/api/song/detail/?id=686361&ids=['686361']").readall()
+# resp = request.urlopen(r"http://music.163.com/api/playlist/detail?id=76494274").readall()
 # data = json.loads(resp.decode())
 # print (data)
-
-# download_by_album(2956076)
-
