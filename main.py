@@ -1,10 +1,11 @@
-import netease_api
 from netease_api import search
 from pprint import pprint
+import netease_api
 import os
 
 welcome = """Hello! This is a open-source third party NetEase Music player!"""
 
+print (welcome)
 
 while(True):
 	print("What are you going to do..?")
@@ -31,6 +32,5 @@ while(True):
 				# print ("{name}\t\t{album}\t\t{artists}".format(**song))
 				temp += [song]
 			song_id = temp[int(input("Enter your choice: "))]['id']
-			play_result = netease_api.play(song_id)
-			if play_result:
-				os.startfile(play_result)
+			netease_api.play(song_id)
+

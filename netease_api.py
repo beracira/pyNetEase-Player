@@ -1,9 +1,11 @@
+from http import client
 from pprint import pprint as print
 from urllib import parse, request
-from http import client
-import json
-import hashlib
 import base64
+import hashlib
+import json
+import os
+import pyglet
 
 search_url = 'http://music.163.com/api/search/get'
 
@@ -87,25 +89,30 @@ def play(sid):
 	resp = request.urlopen(detail_url).readall()
 
 	data = json.loads(resp.decode())
-	try:
-		mp3_url = data['songs'][0]['mp3Url']
-		name = data['songs'][0]['name']
-		print ("Start buffering....")
-		data = request.urlopen(mp3_url).readall()
-		try:
+	# try:
+	mp3_url = data['songs'][0]['mp3Url']
+	name = data['songs'][0]['name']
+	print ("Start buffering.......")
 
-			f = open(name + '.mp3', "wb")
-			f.write(data)
-			f.close()
+	data = request.urlopen(mp3_url).readall()
+		# try:
 
-			print ("Downloaded successfully!")
-			return name + '.mp3'
-		except:
-			pass
-	except:
-		pass
-	print ('Cache Failed!')
-	return False
+	f = open(name + '.mp3', "wb")
+	f.write(data)
+	f.close()
+
+	print ("Downloaded successfully!")
+	print (f)
+	# os.startfile(name + '.mp3')
+	sound = pyglet.media.load(name + '.mp3', streaming=True)
+	sound.play()
+	pyglet.app.run()
+	return name + '.mp3'
+	# 	except:
+	# 		print ("File could not be written.")
+	# except:
+	# 	print ("Cannot connect.")
+	# return False
 
 
 
