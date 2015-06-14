@@ -126,12 +126,19 @@ def download(sid, path = "\\Download\\"):
 		f.write(data)
 		f.close()
 
+	data = request.urlopen(mp3_url).readall()
+		# try:
+
+	f = open(name + '.mp3', "wb")
+	f.write(data)
+	f.close()
+
 	print ("Downloaded successfully!")
 	# print (f)
 	# os.startfile(name + '.mp3')
-	# sound = pyglet.media.load(name + '.mp3', streaming=True)
-	# sound.play()
-	# pyglet.app.run()
+	sound = pyglet.media.load(name + '.mp3', streaming=True)
+	sound.play()
+	pyglet.app.run()
 	return name + '.mp3'
 	# 	except:
 	# 		print ("File could not be written.")
