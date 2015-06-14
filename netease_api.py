@@ -1,12 +1,12 @@
 from http import client
 from pprint import pprint as print
+from time import ctime
 from urllib import parse, request
 import base64
 import hashlib
 import json
 import os
 import pyglet
-from time import ctime
 
 search_url = 'http://music.163.com/api/search/get'
 
