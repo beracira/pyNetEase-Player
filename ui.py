@@ -87,7 +87,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "pyNetEase Player"))
         self.lable_Local_Dire.setText(_translate("Form", "Local Directory"))
         self.lable_Cloud_Playlist.setText(_translate("Form", "Cloud Playlist"))
         self.pushButton_Search.setText(_translate("Form", "Search"))

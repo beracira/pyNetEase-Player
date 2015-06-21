@@ -6,7 +6,8 @@ import base64
 import hashlib
 import json
 import os
-import pyglet
+# import pyglet
+import PyQt5
 
 search_url = 'http://music.163.com/api/search/get'
 
@@ -192,4 +193,3 @@ def download_by_album(aid):
 # print (data)
 
 # download_by_album(2956076)
-

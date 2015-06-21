@@ -99,3 +99,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+albumdata
+dist123/main.exe
+songsdata
