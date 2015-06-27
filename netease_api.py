@@ -68,7 +68,7 @@ def search(s, stype, offset = 0, limit = 10):
 	'''
 	s: target string
 	stype: song(1), album(10), singer(100), playlist(1000), user(1002)
-	limit: maximum return item	
+	limit: maximum return item
 	'''
 	params = {
 		's' : s,
@@ -102,10 +102,10 @@ def get_song_url(sid, data):
 
 	return template.format(encrypted_id(str(dfsid).encode("utf8")), dfsid)
 
-	
+
 
 def download(sid, path = "Downloads\\"):
-	try: 
+	try:
 		os.mkdir(path)
 	except:
 		pass
@@ -116,7 +116,7 @@ def download(sid, path = "Downloads\\"):
 
 	name = data['name']
 	artist = data['artists'][0]['name']
-	print ("Start downloading: " + name)
+	# print ("Start downloading: " + name)
 
 	if (not os.path.isfile(path + name + " " + artist + '.mp3')):
 		mp3_url = get_song_url(sid, data)
@@ -127,7 +127,7 @@ def download(sid, path = "Downloads\\"):
 		f.write(data)
 		f.close()
 
-	print ("Downloaded successfully!")
+	# print ("Downloaded successfully!")
 	# print (f)
 	# os.startfile(name + '.mp3')
 	# sound = pyglet.media.load(name + '.mp3', streaming=True)
@@ -152,7 +152,7 @@ def download_by_album(aid):
 	path = "Downloads\\" + name + " " + artist + " " + time + "\\"
 
 
-	try: 
+	try:
 		os.mkdir(path)
 	except:
 		pass

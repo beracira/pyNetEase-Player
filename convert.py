@@ -1,6 +1,6 @@
 from PyQt5 import uic
 # from PyQt5.QtCore import PYQT_VERSION_STR
-import PyQt5 
+import PyQt5
 
 fin = open("main.ui", "r")
 fout = open("ui.py", "w")

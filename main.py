@@ -30,7 +30,7 @@ while(True):
 					'artists': song['artists'][0]['name'],
 					'duration': song['duration'],
 					'id': song['id']}
-				# song_temp = 
+				# song_temp =
 				print (str(i) + ". {name:<18} {album:<18} {artists:<18}".format(**song))
 				# print ("{name}\t\t{album}\t\t{artists}".format(**song))
 				temp += [song]
@@ -61,5 +61,3 @@ while(True):
 
 	if (opt == '4'):
 		sys.exit(0)
-				
-
