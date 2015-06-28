@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>898</width>
-    <height>600</height>
+    <width>844</width>
+    <height>570</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -105,6 +105,11 @@
        </item>
        <item>
         <widget class="QTableWidget" name="tableWidget">
+         <column>
+          <property name="text">
+           <string>Download</string>
+          </property>
+         </column>
          <column>
           <property name="text">
            <string>Track</string>

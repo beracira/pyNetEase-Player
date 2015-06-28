@@ -140,16 +140,16 @@ def download(sid, path = "Downloads\\"):
 	# 	print ("Cannot connect.")
 	# return False
 
-def download_by_album(aid):
+def download_by_album(aid, button):
 	album_url =  "http://music.163.com/api/album/{0}/".format(aid)
 
 	resp = request.urlopen(album_url).readall()
 	data = json.loads(resp.decode())['album']
 
-	time = ctime(data['publishTime'] / 1000)[-4:0]
+	# time = ctime(data['publishTime'] / 1000)[-4:0]
 	artist = data['artist']['name']
 	name = data['name']
-	path = "Downloads\\" + name + " " + artist + " " + time + "\\"
+	path = "Downloads\\" + name + " " + artist + " " + "\\"
 
 
 	try:
@@ -157,17 +157,25 @@ def download_by_album(aid):
 	except:
 		pass
 
-	print ("Cover downloading...")
+	# print ("Cover downloading...")
+
+	# button text
+	length = len(data['songs'])
+	button.setText("%d/%d".format(0, length))
 
 	pic = request.urlopen(data['picUrl']).readall()
 	f = open(path + "cover.jpg", "wb")
 	f.write(pic)
 	f.close()
 
-	for song in data['songs']:
+	length = len(data['songs'])
+	button.setText("%d / %d".format(0, length))
+	for (song, i) in zip(data['songs'], range(length)):
 		download(song['id'], path)
+		button.setText("%d/%d".format(i + 1, length))
 
-	print ("Album downloaded!")
+
+	# print ("Album downloaded!")
 
 
 
