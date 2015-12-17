@@ -17,22 +17,44 @@ cookie_opener.addheaders.append(('Cookie', 'appver=2.7.0'))
 cookie_opener.addheaders.append(('Referer', 'http://music.163.com'))
 request.install_opener(cookie_opener)
 
+def netease_hymn():
+    return """
+    player's Game Over,
+    u can abandon.
+    u get pissed,
+    get pissed,
+    Hallelujah my King!
+    errr oh! fuck ohhh!!!!
+    """
 
-def encrypted_id(id):
+def encrypted_id(dfsId):
 	# f = open("data1.out", "w")
 
-	byte1 = bytearray('3go8&$8*3*3h0k(2)2'.encode('ascii'))
-	byte2 = bytearray(id)
-	byte1_len = len(byte1)
-	for i in range(len(byte2)):
-		byte2[i] = byte2[i]^byte1[i%byte1_len]
+	# byte1 = bytearray('3go8&$8*3*3h0k(2)2'.encode('ascii'))
+	# byte2 = bytearray(id)
+	# byte1_len = len(byte1)
+	# for i in range(len(byte2)):
+	# 	byte2[i] = byte2[i]^byte1[i%byte1_len]
 
-	byte2 = hashlib.md5(byte2).digest()
-	result = base64.b64encode(byte2).decode()
+	# byte2 = hashlib.md5(byte2).digest()
+	# result = base64.b64encode(byte2).decode()
+	# result = result.replace('/', '_')
+	# result = result.replace('+', '-')
+
+	# return result
+	x = [ord(i[0]) for i in netease_hymn().split()]
+	y = ''.join([chr(i - 61) if i > 96 else chr(i + 32) for i in x])
+	byte1 = bytearray(y, encoding='ascii')
+	byte2 = bytearray(str(dfsId), encoding='ascii')
+	for i in range(len(byte2)):
+	    byte2[i] ^= byte1[i % len(byte1)]
+	m = hashlib.md5()
+	m.update(byte2)
+	result = base64.b64encode(m.digest()).decode('ascii')
 	result = result.replace('/', '_')
 	result = result.replace('+', '-')
-
 	return result
+
 
 def search_by_name(name):
 	params = {
@@ -88,7 +110,7 @@ def search(s, stype, offset = 0, limit = 10):
 
 
 def get_song_url(sid, data):
-	template = "http://m1.music.126.net/{0}/{1}.mp3"
+	template = "http://m5.music.126.net/{0}/{1}.mp3"
 
 	dfsid = ''
 
@@ -100,19 +122,24 @@ def get_song_url(sid, data):
 		except:
 			return data['mp3Url']
 
+	print (template.format(encrypted_id(str(dfsid).encode("utf8")), dfsid))
 	return template.format(encrypted_id(str(dfsid).encode("utf8")), dfsid)
 
 
 
-def download(sid, path = "Downloads\\"):
+def download(sid, button, path = "Downloads\\"):
 	try:
 		os.mkdir(path)
 	except:
 		pass
 
+	print (sid)
+	button.setText("Downloading")
+
 	detail_url = r"http://music.163.com/api/song/detail/?id={0}&ids=['{0}']".format(sid)
 	resp = request.urlopen(detail_url).readall()
 	data = json.loads(resp.decode())['songs'][0]
+	# print (data)
 
 	name = data['name']
 	artist = data['artists'][0]['name']
@@ -126,6 +153,8 @@ def download(sid, path = "Downloads\\"):
 		f = open(path + name + " " + artist + '.mp3', "wb")
 		f.write(data)
 		f.close()
+
+	button.setText("Finished!")
 
 	# print ("Downloaded successfully!")
 	# print (f)
@@ -179,7 +208,7 @@ def download_by_album(aid, button):
 
 
 
-# search_by_songs("two of us")
+print (search_by_songs("two of us"))
 # print (search("The Beatles Bootleg Recordings 1963".encode("utf8"), 10))
 # resp = request.urlopen(r"http://music.163.com/api/album/2956076/").readall()
 # data = json.loads(resp.decode())
@@ -201,3 +230,4 @@ def download_by_album(aid, button):
 # print (data)
 
 # download_by_album(2956076)
+

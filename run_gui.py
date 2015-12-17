@@ -1,8 +1,13 @@
+#! /usr/bin/python3
+
 import ui
 import sys
 import netease_api
+from PyQt5.QtCore import pyqtSignal
 from PyQt5 import QtWidgets, QtGui, QtCore
 from functools import partial
+
+global_sid = 0
 
 class Main(QtWidgets.QWidget):
 
@@ -179,16 +184,40 @@ class Main(QtWidgets.QWidget):
 
 
 	def song_list_button_on_click(self, song):
-		song[0].setText("Downloading")
+		# song[0].setText("Downloading")
 		# print (sid)
-		netease_api.download(song[5])
-		song[0].setText("Finished!")
+		song[0].setText("Downloading")
+		self.workThread = WorkThread()
+		self.workThread.downloadSingle.connect(netease_api.download)
+		self.workThread.take(song[0], song[5])
+	
+		self.workThread.start()
+
+		# netease_api.download(song[5])
+		# song[0].setText("Finished!")
 
 	def album_song_list_button_on_click(self, album):
 		album[0].setText("Downloading")
 		netease_api.download_by_album(album[4], album[0])
 		album[0].setText("Finished")
 
+class WorkThread(QtCore.QThread):
+	#define signal here
+	downloadSingle = pyqtSignal(int, object)
+	downloadAlbum = pyqtSignal()
+
+	def __init__(self):
+		QtCore.QThread.__init__(self)
+
+	def take(self, button, sid):
+		self.button = button
+		self.sid = sid
+
+	def run(self):
+		print (self.sid)
+		# self.downloadSingle.emit(self.sid, self.button)
+		netease_api.download(self.sid, self.button)
+		return
 
 
 if __name__ == "__main__":
@@ -198,5 +227,7 @@ if __name__ == "__main__":
 
 	app = QtWidgets.QApplication(args)
 	main = Main()
+	# mainThread = MainThread()
+	# mainThread.start()
 	main.show()
 	sys.exit(app.exec_())
